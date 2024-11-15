@@ -1,0 +1,114 @@
+<html>
+<head>
+    <title>Weather</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="sun"></div>
+
+<!-- Clouds -->
+<div class="cloud cloud1"></div>
+<div class="cloud cloud2"></div>
+<div class="cloud cloud3"></div>
+
+<!-- Optional stars (if you want a night sky effect) -->
+<div class="star" style="top: 10%; left: 70%;"></div>
+<div class="star" style="top: 20%; left: 30%;"></div>
+<div class="star" style="top: 50%; left: 80%;"></div>
+
+    
+    <div class="card">
+        <div class="search">
+            <input type="text" name="" id="" spellcheck="false"> 
+            <button><img src="./images/search.png"></button>
+        </div>
+        <div class="err">
+            <p>Inavlid City Name !!!</p>
+        </div>
+        <div class="weather">
+            <img class="icon" src="./images/rain.png" >
+            <h1 class="temp">22 °C</h1>
+            <h2 class="city">New York</h2>
+        
+        <div class="details">
+            <div class="col">
+                <img src="./images/humidity.png" alt="">
+                <div>
+                    <p class="humidity">50%</p>
+                </div>
+                <div class="hum"><p>Humidity</p></div>
+                
+            </div>
+            <div class="col">
+                <img src="./images/wind.png" alt="">
+                <div>
+                    <p class="wind">22 Km/h</p>
+                </div>
+                <div class="win"><p>Wind Speed</p></div>
+            </div>
+        </div>
+        
+    </div>
+        <script>
+            const apikey="f0ef7948b02d6e8eceb01c7532034814";
+            const apiurl="https://api.openweathermap.org/data/2.5/weather?units=metric";
+            const serchBox=document.querySelector(".search input ");
+            const searchbtn=document.querySelector(".search button");
+            const Icn=document.querySelector(".icon");
+            async function chechWeather(city)
+            {
+            
+                const resp=await fetch(apiurl+"&q="+city+`&appid=${apikey}`);
+                if(resp.status == 404)
+            {
+                document.querySelector(".err").style.display="block";
+                document.querySelector(".weather").style.display="none";
+            }
+            else{
+                var data=await resp.json();
+                console.log(data);
+                document.querySelector(".city").innerHTML=data.name ;
+            document.querySelector(".temp").innerHTML=Math.round(data.main.temp)+" °C";
+            document.querySelector(".humidity").innerHTML=data.main.humidity + "%";
+            document.querySelector(".wind").innerHTML=data.wind.speed + " KM/H";
+            
+            if(data.weather[0].main == "Rain")
+            {
+                    Icn.src="./images/rain.png";
+            }
+            else if(data.weather[0].main == "Clouds")
+            {
+                    Icn.src="./images/clouds.png";
+            }
+            else if(data.weather[0].main == "Mist")
+            {
+                    Icn.src ="./images/mist.png";
+            }
+            else if(data.weather[0].main == "Snow")
+            {
+                    Icn.src="./images/snow.png";
+            }
+            else if(data.weather[0].main == "Clear")
+            {                     Icn.src="./images/clear.png";
+            }
+            else if(data.weather[0].main == "Drizzle")
+            {
+                    Icn.src="./images/drizzle.png";
+            }
+            
+        
+            document.querySelector(".weather").style.display="block";
+            document.querySelector(".err").style.display="none";
+            }
+        }
+
+
+            searchbtn.addEventListener("click",()=>{
+                chechWeather(serchBox.value);
+            })
+
+        </script>
+        
+</body>
+
+</html>
